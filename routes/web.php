@@ -174,6 +174,7 @@ Route::middleware(['auth', \App\Http\Middleware\CheckRole::class.':admin'])->gro
 Route::middleware(['auth', \App\Http\Middleware\CheckRole::class.':admin'])->prefix('admin')->name('admin.')->group(function () {
     Route::get('/dashboard', [AdminDashboardController::class, 'index'])->name('dashboard');
     Route::resource('roles', RoleController::class);
+    Route::resource('products', ProductController::class);
     // Route::resource('users', UserController::class); // Removed: No UserController exists, ProfileController handles users
     Route::get('/settings', function () {
         return view('admin.settings');

@@ -60,7 +60,7 @@
                                 <a href="{{ route('roles.index') }}" class="list-group-item list-group-item-action">
                                     <i class="fas fa-user-tag"></i> Manage Roles
                                 </a>
-                                <a href="{{ route('products.index') }}" class="list-group-item list-group-item-action">
+                                <a href="{{ route('admin.products.index') }}" class="list-group-item list-group-item-action">
                                     <i class="fas fa-box"></i> Manage Products
                                 </a>
                                 <a href="{{ route('settings') }}" class="list-group-item list-group-item-action">

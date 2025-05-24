@@ -9,6 +9,9 @@ class ProductController extends Controller
 {
     public function index()
     {
+        if (!auth()->user() || (!auth()->user()->hasRole('admin') && !auth()->user()->hasRole('manager'))) {
+            abort(403, 'Unauthorized');
+        }
         $products = Product::paginate(10);
         return view('products.index', compact('products'));
     }
@@ -40,13 +43,22 @@ class ProductController extends Controller
 
         Product::create($validated);
 
-        return redirect()->route('products.index')
+        // Determine the route prefix based on the user's role
+        $routePrefix = '';
+        if (request()->route()->getPrefix() === 'admin') {
+            $routePrefix = 'admin.';
+        } elseif (request()->route()->getPrefix() === 'manager') {
+            $routePrefix = 'manager.';
+        }
+        
+        return redirect()->route($routePrefix . 'products.index')
             ->with('success', 'Product created successfully.');
     }
 
     public function show(Product $product)
     {
-        return view('products.show', compact('product'));
+        // Redirect to the shop-details view which already exists
+        return redirect()->route('shop.details', $product->id);
     }
 
     public function edit(Product $product)
@@ -76,7 +88,15 @@ class ProductController extends Controller
 
         $product->update($validated);
 
-        return redirect()->route('products.index')
+        // Determine the route prefix based on the route prefix
+        $routePrefix = '';
+        if (request()->route()->getPrefix() === 'admin') {
+            $routePrefix = 'admin.';
+        } elseif (request()->route()->getPrefix() === 'manager') {
+            $routePrefix = 'manager.';
+        }
+        
+        return redirect()->route($routePrefix . 'products.index')
             ->with('success', 'Product updated successfully.');
     }
 
@@ -87,7 +107,15 @@ class ProductController extends Controller
         }
         $product->delete();
 
-        return redirect()->route('products.index')
+        // Determine the route prefix based on the route prefix
+        $routePrefix = '';
+        if (request()->route()->getPrefix() === 'admin') {
+            $routePrefix = 'admin.';
+        } elseif (request()->route()->getPrefix() === 'manager') {
+            $routePrefix = 'manager.';
+        }
+        
+        return redirect()->route($routePrefix . 'products.index')
             ->with('success', 'Product deleted successfully.');
     }
 
